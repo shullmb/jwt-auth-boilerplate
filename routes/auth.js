@@ -10,8 +10,10 @@ router.post('/signup', (req,res) => {
   User.find({email: req.body.email}, function(err, user) {
     if (user) {
       // if exist? alert the user that email is taken
-      // redirect to signup
-      res.redirect('/auth/signup');
+      res.status(401).json({
+        error: true,
+        message: 'Email already exists'
+      });
     } else {
       // else: create user in DB
       User.create({
@@ -23,26 +25,44 @@ router.post('/signup', (req,res) => {
         if (err) {
           console.log("We got an error creating the user")
           console.log(err);
-          res.send(err);
+          res.status(401).json(err);
         } else {
           // log them in (sign a new token)
           console.log('><><>< JUST ABOUT TO SIGN THE TOKEN ><><><')
+          var token = jwt.sign(user.toObject(), process.env.JWT_SECRET, {
+            expiresIn: 60 * 60 * 24
+          })
           // return user and token to frontend app
+          res.json({user, token});
         }
-
       })
-
     }
   })
 })
 
 router.post('/login', (req, res) => {
   // Look up user in DB by email
-    // if user?
-      // check password input against hash
+  User.findOne({email: req.body.email}, function(err, user) {
+    if (user) {
+      // if user: check password input against hash
+      if (user.authenticated()) {
         // if match: sign a token
-        // else send error, redirect to login
-    // else redirect to /login
+        var token = jwt.sign(user.toObject(), process.env.JWT_SECRET, {
+          expires: 60 * 60 * 24
+        })
+        res.json({user, token});
+      } else {
+        // else send error to frontend
+        res.status(401).json({
+          error: true,
+          message: 'Email of password is incorrect.'
+        })
+      }
+    } else {
+      // else send error to frontend
+      res.status(401).json(err);
+    }
+  })
 })
 
 router.post('/me/from/token', (req,res) => {
