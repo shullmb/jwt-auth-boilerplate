@@ -3,7 +3,7 @@ import axios from 'axios';
 import './App.css';
 import Login from './Login';
 import Signup from './Signup';
-import UserProfile from './UserProfile';
+import { UserProfile } from './UserProfile';
 
 
 class App extends Component {
@@ -86,6 +86,3 @@ class App extends Component {
 }
 
 export default App;
-
-<Login />
-<Signup />
