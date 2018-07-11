@@ -7,13 +7,33 @@ const jwt = require('jsonwebtoken');
 
 router.post('/signup', (req,res) => {
   // see if the email is already in the DB
-    // if exist? alert the user that email is taken
+  User.find({email: req.body.email}, function(err, user) {
+    if (user) {
+      // if exist? alert the user that email is taken
       // redirect to signup
-    // else 
-      // create user in DB
-      // check for db errs
-      // log them in (sign a new token)
-      // return user and token to frontend app
+      res.redirect('/auth/signup');
+    } else {
+      // else: create user in DB
+      User.create({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password
+      }, function(err, user) {
+        // check for db errs
+        if (err) {
+          console.log("We got an error creating the user")
+          console.log(err);
+          res.send(err);
+        } else {
+          // log them in (sign a new token)
+          console.log('><><>< JUST ABOUT TO SIGN THE TOKEN ><><><')
+          // return user and token to frontend app
+        }
+
+      })
+
+    }
+  })
 })
 
 router.post('/login', (req, res) => {
