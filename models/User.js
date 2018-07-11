@@ -39,13 +39,14 @@ userSchema.methods.authenticated = function(password) {
   return bcrypt.compareSync(password, this.password);
 }
 
-// hash password before inserted into db
+// middleware to hash password before inserted into db
 userSchema.pre('save', function(next) {
   if (this.isNew) {
     let hash = bcrypt.hashSync(this.password, 12);
     this.password = hash;
   }
-})
+  next();
+});
 
 const User = new mongoose.model('User', userSchema);
 
