@@ -10,6 +10,17 @@ class App extends Component {
       user: null
     }
     this.checkForLocalToken = this.checkForLocalToken.bind(this);
+    this.logout = this.logout.bind(this);
+  }
+
+  logout() {
+    // remove token from local storage
+    localStorage.removeItem('mernToken');
+    // remove info from state
+    this.setState({
+      token: '',
+      user: null
+    })
   }
 
   checkForLocalToken() {
@@ -17,7 +28,7 @@ class App extends Component {
     let token = localStorage.getItem('mernToken');
     if (!token) {
       // There was no token
-      // remove mernToken from local storage just in case corrupted, replace etc
+      // remove mernToken from local storage just in case corrupted, replaced etc
       localStorage.removeItem('mernToken') 
       this.setState({
         token: '',
@@ -37,6 +48,10 @@ class App extends Component {
         })
       }).catch( err => console.log(err))
     }
+  }
+
+  componentDidMount() {
+    this.checkForLocalToken();
   }
 
   render() {
