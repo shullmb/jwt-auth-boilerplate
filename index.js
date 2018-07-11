@@ -17,6 +17,10 @@ app.use(express.static(__dirname + '/client/build'));
 
 app.use('/auth', auth);
 
+app.get('*', (req,res) => {
+  res.sendFile(__dirname + "/client/build/index.html");
+})
+
 var server = app.listen(port, () => {
   console.log('\x1b[36m%s\x1b[0m', `* * *  running on ${port}  * * *`)
 })
