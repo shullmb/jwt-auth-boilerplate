@@ -70,11 +70,28 @@ router.post('/me/from/token', (req,res) => {
   // check for presence of a token
   if (!token) {
     // no token sent
+    res.status(401).json({
+      error: true,
+      message: 'You must pass a token'
+    })
   } else {
     // token sent
     // validate the token
-      // if valid: lookup user in DB based on token info => send user and token back to frontend
-      // else: send err => redirect to /login
+    jwt.verify(token, process.env.JWT_SECRET, function(err, user) {
+      if (err) {
+        res.status(401).json(err)
+      } else {
+        User.findById(user._id, function(err, user) {
+          // if valid: lookup user in DB based on token info => send user and token back to frontend
+          // else: send err 
+          if (err) {
+            res.status(401).json(err)
+          } else {
+            res.json({user, token})
+          }
+        })
+      }
+    })
   }
 })
 
