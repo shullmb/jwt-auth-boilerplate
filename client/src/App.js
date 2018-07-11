@@ -11,6 +11,14 @@ class App extends Component {
     }
     this.checkForLocalToken = this.checkForLocalToken.bind(this);
     this.logout = this.logout.bind(this);
+    this.liftTokenToState = this.liftTokenToState.bind(this);
+  }
+
+  liftTokenToState(data) {
+    this.setState({
+      token: data.token,
+      user: data.user
+    })
   }
 
   logout() {

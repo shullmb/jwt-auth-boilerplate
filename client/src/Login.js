@@ -32,15 +32,23 @@ class Login extends Component {
       password: this.state.password
     }).then( result => {
       localStorage.setItem('mernToken', result.data.token)
-      // need to lift state
-    })
+      this.props.liftToken(result.data);
+    }).catch( err => console.log(err) )
   }
 
   render() {
     return (
-      <div>
-
-      </div>
+      <form onSubmit={this.handleSubmit}>
+        Email: <input type="email" 
+                      value={this.state.email} 
+                      onChange={this.handleEmailChange}
+                /> <br />
+        Password: <input type="password" 
+                         value={this.state.password} 
+                         onChange={this.handlePasswordChange}
+                  />
+        <input type="submit" value="Log In"/>
+      </form>
     )
   }
 }
