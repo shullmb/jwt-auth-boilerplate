@@ -42,7 +42,7 @@ userSchema.methods.authenticated = function(password) {
 // middleware to hash password before inserted into db
 userSchema.pre('save', function(next) {
   if (this.isNew) {
-    let hash = bcrypt.hashSync(this.password, 12);
+    let hash = bcrypt.hashSync(this.password, 12); //<= 12 is the new standard
     this.password = hash;
   }
   next();
