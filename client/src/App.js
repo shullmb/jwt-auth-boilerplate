@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css';
+import Login from './Login';
+import Signup from './Signup';
+import UserProfile from './UserProfile';
+
 
 class App extends Component {
   constructor(props) {
@@ -63,17 +67,25 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
+    let user = this.state.user;
+    if (user) {
+      return (
+        <div className="App">
+          <UserProfile user={user} logout={this.logout}/>
+        </div>
+      );
+    } else {
+      return (
+        <div className="App">
+          <Signup liftToken={this.liftTokenToState} />
+          <Login liftToken={this.liftTokenToState} />
+        </div>
+      )
+    }
   }
 }
 
 export default App;
+
+<Login />
+<Signup />
