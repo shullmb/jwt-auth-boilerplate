@@ -79,15 +79,15 @@ router.post('/me/from/token', (req,res) => {
     // validate the token
     jwt.verify(token, process.env.JWT_SECRET, function(err, user) {
       if (err) {
-        res.status(401).json(err)
+        res.status(401).json(err);
       } else {
         User.findById(user._id, function(err, user) {
           // if valid: lookup user in DB based on token info => send user and token back to frontend
           // else: send err 
           if (err) {
-            res.status(401).json(err)
+            res.status(401).json(err);
           } else {
-            res.json({user, token})
+            res.json({user, token});
           }
         })
       }
@@ -95,5 +95,6 @@ router.post('/me/from/token', (req,res) => {
   }
 })
 
+// logout handled on frontend - delete token 
 
 module.exports = router;
