@@ -53,14 +53,19 @@ router.post('/login', (req, res) => {
         res.json({user, token});
       } else {
         // else send error to frontend
-        res.status(401).json({
+        res.json({
           error: true,
-          message: 'Email of password is incorrect.'
+          status: 401,
+          message: 'Email or password is incorrect.'
         })
       }
     } else {
       // else send error to frontend
-      res.status(401).json(err);
+      res.json({
+        error: true,
+        status: 401,
+        message: 'account not found'
+      });
     }
   })
 })

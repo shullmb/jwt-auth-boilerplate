@@ -50,7 +50,7 @@ class App extends Component {
   checkForLocalToken() {
     //Look for token in local storage
     let token = localStorage.getItem('mernToken');
-    if (!token) {
+    if (!token || token === 'undefined' ) {
       // There was no token
       // remove mernToken from local storage just in case corrupted, replaced etc
       localStorage.removeItem('mernToken') 
