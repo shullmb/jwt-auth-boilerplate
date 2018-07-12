@@ -11,17 +11,29 @@ class App extends Component {
     super(props)
     this.state = {
       token: '',
-      user: null
+      user: null,
+      lockedResult: ''
     }
     this.checkForLocalToken = this.checkForLocalToken.bind(this);
     this.logout = this.logout.bind(this);
     this.liftTokenToState = this.liftTokenToState.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   liftTokenToState(data) {
     this.setState({
       token: data.token,
       user: data.user
+    })
+  }
+
+  handleClick(e) {
+    e.preventDefault();
+    axios.defaults.headers.common['Authorization'] = `Bearer ${this.state.token}`;
+    axios.get('/locked/test').then( results => {
+      this.setState({
+        lockedResult: results.data
+      })
     })
   }
 
@@ -72,6 +84,8 @@ class App extends Component {
       return (
         <div className="App">
           <UserProfile user={user} logout={this.logout}/>
+          <a onClick={this.handleClick}> Test the protected route</a>
+          <p>{this.state.lockedResult}</p>
         </div>
       );
     } else {
